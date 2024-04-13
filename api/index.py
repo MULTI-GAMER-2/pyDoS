@@ -11,9 +11,9 @@ app = Flask(__name__)
 def start_attack():
     data = request.get_json()
     num_bytes = data.get('payload', 1024)
-    time_duration = data.get('time', 60)  # Rename attack_num to time for clarity
+    time_duration = int(data.get('time', 60))  # Rename attack_num to time for clarity
     target_ip = data.get('ip', "0.0.0.0")
-    target_port = data.get('port', 80)
+    target_port = int(data.get('port', 80))
 
     start_time = time.time()  # Record the start time of the attack
 
