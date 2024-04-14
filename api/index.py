@@ -23,7 +23,7 @@ def start_attack():
         
 
     for _ in range(int(data.get('threads', 10))):
-        for _ in range(num_attacks):
+        for _ in range(int(num_attacks)):
             attack()
 
     return jsonify({'success': True, 'message': 'Attack finished successfully.'})
