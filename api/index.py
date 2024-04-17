@@ -6,11 +6,11 @@ import re
 import time as t
 
 app = Flask(__name__)
-start_time = t.time()
     
 @app.route('/attack', methods=['POST'])
 def start_attack():
     data = request.get_json()
+    start_time = t.time()
     num_bytes = data.get('payload', 1024)
     num_attacks = data.get('attack_num', 100000)
     target_ip = data.get('ip', "0.0.0.0")
