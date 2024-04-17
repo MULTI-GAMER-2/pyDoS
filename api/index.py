@@ -15,7 +15,7 @@ def start_attack():
     num_attacks = data.get('attack_num', 100000)
     target_ip = data.get('ip', "0.0.0.0")
     target_port = data.get('port', 80)
-    duration = int(data.get("time", 10))
+    duration = int(data.get("time", 10000))
 # Function to check if a string is a valid IP address
     def is_valid_ip(ip):
         parts = ip.split('.')
