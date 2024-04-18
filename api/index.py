@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS  # Import CORS from flask_cors
 import socket
 import random
 import os
@@ -6,7 +7,7 @@ import re
 import time as t
 
 app = Flask(__name__)
-    
+CORS(app)    
 @app.route('/attack', methods=['POST'])
 def start_attack():
     data = request.get_json()
